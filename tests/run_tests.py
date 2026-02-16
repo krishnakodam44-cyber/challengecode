@@ -2,6 +2,11 @@ import importlib.util
 import sys
 from pathlib import Path
 
+# Ensure project root is on sys.path so `from main import app` works
+project_root = Path(__file__).resolve().parents[1]
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 test_path = Path(__file__).parent / "test_api.py"
 spec = importlib.util.spec_from_file_location("test_api", str(test_path))
 mod = importlib.util.module_from_spec(spec)
