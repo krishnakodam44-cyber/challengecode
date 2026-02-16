@@ -1,6 +1,12 @@
-from importlib import import_module
+import importlib.util
+import sys
+from pathlib import Path
 
-mod = import_module('tests.test_api')
+test_path = Path(__file__).parent / "test_api.py"
+spec = importlib.util.spec_from_file_location("test_api", str(test_path))
+mod = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = mod
+spec.loader.exec_module(mod)
 
 tests = [
     getattr(mod, name)
