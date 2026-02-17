@@ -2,25 +2,84 @@
 
 A FastAPI-based metadata service for dataset lineage tracking and management.
 
+## Dependencies
+
+### System Requirements
+- **Docker**: v20.10+
+- **Docker Compose**: v2.0+
+- **Python**: 3.11+ (for local development without Docker)
+
+### Python Dependencies (installed automatically)
+- `fastapi==0.111.0` - Web framework
+- `uvicorn[standard]==0.30.0` - ASGI server
+- `sqlalchemy==2.0.30` - ORM and database toolkit
+- `pymysql==1.1.1` - MySQL database driver
+- `pydantic-settings==2.3.4` - Settings management
+- `python-dotenv==1.0.1` - Environment variable loading
+
+See `pyproject.toml` for complete dependency list.
+
 ## Quick Start
 
-### Prerequisites
+### Option 1: Run with Docker Compose (Recommended)
+
+#### Prerequisites
 - Docker and Docker Compose installed
 
-### Run the Application
+#### Commands
 
 ```bash
+# Clone the repository
+git clone https://github.com/krishnakodam44-cyber/challengecode.git
+cd challengecode/app
+
+# Start the application and database
 docker compose up
+
+# In another terminal, stop the application
+docker compose down
+
+# View logs
+docker compose logs -f api
 ```
 
 This will start:
 - **API Server**: http://localhost:8000
 - **MySQL Database**: localhost:3307
 
+### Option 2: Run Locally (with Python)
+
+#### Prerequisites
+- Python 3.11+
+- Poetry package manager
+
+#### Commands
+
+```bash
+# Clone the repository
+git clone https://github.com/krishnakodam44-cyber/challengecode.git
+cd challengecode/app
+
+# Install dependencies
+poetry install
+
+# Activate virtual environment
+poetry shell
+
+# Create database tables (ensure MySQL is running)
+# Modify DATABASE_URL in .env to point to your MySQL instance
+
+# Run the application
+uvicorn main:app --reload
+
+# Deactivate environment
+exit
+```
+
 ### Access the API
 
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+- **Swagger UI (Interactive Docs)**: http://localhost:8000/docs
+- **ReDoc (Alternative Docs)**: http://localhost:8000/redoc
 - **Health Check**: http://localhost:8000/
 
 ## Architecture Decisions
@@ -52,14 +111,48 @@ This will start:
 
 ## Development
 
-### Local Setup (with Python)
+### Local Setup Commands
 
+#### Install Dependencies
 ```bash
-# Install dependencies
+# Using Poetry
 poetry install
 
-# Run the application
+# Activate virtual environment
+poetry shell
+```
+
+#### Run the Application Locally
+```bash
+# Start development server with auto-reload
 uvicorn main:app --reload
+
+# Run on specific host and port
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+#### Database Management
+```bash
+# Connect to MySQL locally
+mysql -h localhost -P 3307 -u metadata -p metadata_db
+
+# Connection string for .env
+DATABASE_URL=mysql+pymysql://metadata:metadata@localhost:3307/metadata_db
+```
+
+#### Code Quality Tools
+```bash
+# Format code with Black
+poetry run black .
+
+# Sort imports with isort
+poetry run isort .
+
+# Lint with flake8
+poetry run flake8 .
+
+# Run all checks
+poetry run black . && poetry run isort . && poetry run flake8 .
 ```
 
 ### Environment Variables
@@ -69,6 +162,31 @@ See `.env` file for configuration:
 - `MYSQL_USER`: Database user
 - `MYSQL_PASSWORD`: Database password
 - `MYSQL_DATABASE`: Database name
+
+### Docker Commands
+
+```bash
+# Build Docker image
+docker build -t metadata-service .
+
+# Start services in background
+docker compose up -d
+
+# View running containers
+docker compose ps
+
+# View application logs
+docker compose logs -f api
+
+# Stop all services
+docker compose down
+
+# Remove all volumes (WARNING: deletes data)
+docker compose down -v
+
+# Rebuild containers
+docker compose up --build
+```
 
 ## Project Structure
 
