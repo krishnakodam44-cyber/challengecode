@@ -212,6 +212,67 @@ docker compose up --build
 
 ## API Endpoints
 
-All API endpoints are documented in the Swagger UI at `/docs` when the application is running.
+All API endpoints are automatically documented in the interactive Swagger UI at `/docs` when the application is running.
 
-- `GET /` - Health check endpoint
+### Available Endpoints
+
+- **`GET /`** - Health check endpoint
+  - Returns: `{"status": "ok"}`
+
+- **`POST /datasets`** - Create a new dataset
+  - Request body: Dataset metadata
+  
+- **`GET /datasets`** - List all datasets
+
+- **`GET /datasets/{fqn}`** - Get dataset by fully-qualified name
+
+- **`POST /lineage`** - Add lineage relationship between datasets
+
+- **`GET /lineage/{fqn}`** - Get lineage information for a dataset
+
+- **`GET /search`** - Search datasets by query
+
+### API Documentation UI
+
+The application includes interactive API documentation:
+
+**Swagger UI (default)**: http://localhost:8000/docs
+- Full API exploration and testing interface
+- Try out endpoints directly from the browser
+- Request/response examples
+
+**ReDoc (alternative)**: http://localhost:8000/redoc
+- Clean, read-only API documentation
+- Organized by tags and resources
+
+### Sample Response
+
+```json
+{
+  "status": "ok"
+}
+```
+
+### Usage Example
+
+Once the application is running, you can test endpoints:
+
+```bash
+# Health check
+curl http://localhost:8000/
+
+# Create a dataset
+curl -X POST http://localhost:8000/datasets \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fqn": "production.warehouse.customers",
+    "name": "Customers Table",
+    "owner": "data-team"
+  }'
+
+# Get all datasets
+curl http://localhost:8000/datasets
+
+# Search datasets
+curl "http://localhost:8000/search?query=customers"
+```
