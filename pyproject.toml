@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "metadata-service"
+version = "0.1.0"
+description = "Metadata service for dataset lineage tracking"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{ include = "app" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.111.0"
+uvicorn = { extras = ["standard"], version = "^0.30.0" }
+
+sqlalchemy = "^2.0.30"
+pymysql = "^1.1.1"
+
+pydantic-settings = "^2.3.4"
+python-dotenv = "^1.0.1"
+
+[tool.poetry.group.dev.dependencies]
+alembic = "^1.13.1"
+black = "^24.4.2"
+isort = "^5.13.2"
+flake8 = "^7.0.0"
+pre-commit = "^3.7.1"
+
+# -----------------------------
+# BLACK
+# -----------------------------
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+# -----------------------------
+# ISORT
+# -----------------------------
+[tool.isort]
+profile = "black"
+line_length = 88
+
+# -----------------------------
+# FLAKE8
+# -----------------------------
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
